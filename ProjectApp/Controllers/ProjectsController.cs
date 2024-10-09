@@ -1,3 +1,4 @@
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.Evaluation;
 using ProjectApp.Core.Interfaces;
@@ -30,7 +31,18 @@ namespace ProjectApp.Controllers
         // GET: ProjectsController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            try
+            {
+                Project project = _projectService.GetById(id, "anderslm@kth.se"); // current user
+                if (project == null) return BadRequest(); // HTTP 400
+
+                ProjectDetailsVm detailsVm = ProjectDetailsVm.FromProject(project);
+                return View(detailsVm);
+            }
+            catch (DataException ex)
+            {
+                return BadRequest();
+            }
         }
     
         // GET: ProjectsController/Create

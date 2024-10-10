@@ -1,12 +1,24 @@
+using Microsoft.EntityFrameworkCore;
 using ProjectApp.Core;
 using ProjectApp.Core.Interfaces;
+using ProjectApp.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Dependency injection
 builder.Services.AddScoped<IProjectService, MockProjectService>();
+
+// Add database context
+builder.Services.AddDbContext<ProjectDbContext>(options =>
+    options.UseMySQL(
+        builder.Configuration.GetConnectionString(
+            "ProjectDbConnection")));
+
+// Auto mapper
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 

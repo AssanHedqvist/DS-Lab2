@@ -1,4 +1,6 @@
 using System.Data;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.Evaluation;
 using ProjectApp.Core.Interfaces;
@@ -7,9 +9,9 @@ using Project = ProjectApp.Core.Project;
 
 namespace ProjectApp.Controllers
 {
+    [Authorize]
     public class ProjectsController : Controller
     {
-        
         private IProjectService _projectService;
         
         public ProjectsController(IProjectService projectService)
@@ -19,7 +21,7 @@ namespace ProjectApp.Controllers
         // GET: ProjectsController
         public ActionResult Index()
         {
-            List<Project> projects = _projectService.GetAllByUserName("anderslm@kth.se");
+            List<Project> projects = _projectService.GetAllByUserName(User.Identity.Name);
             List<ProjectVm> projectsVms = new List<ProjectVm>();
             foreach (var project in projects)
             {
@@ -33,7 +35,8 @@ namespace ProjectApp.Controllers
         {
             try
             {
-                Project project = _projectService.GetById(id, "anderslm@kth.se"); // current user
+                Project project = _projectService.GetById(id, User.Identity.Name); // current user
+                if(!project.UserName.Equals(User.Identity.Name)) return BadRequest();
                 ProjectDetailsVm detailsVm = ProjectDetailsVm.FromProject(project);
                 //skapar mapper projekt till projectdetailsVm
                 return View(detailsVm);
@@ -53,16 +56,25 @@ namespace ProjectApp.Controllers
         // POST: ProjectsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(CreateProjectVm projectVm)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    string title = projectVm.Title;
+                    string userName = User.Identity.Name;
+                    
+                    _projectService.Add(userName, title);
+                    return RedirectToAction("Index");
+                }
+                return View(projectVm);
             }
-            catch
+            catch(DataException ex)
             {
-                return View();
+                return View(projectVm);
             }
+            
         }
 
         // GET: ProjectsController/Edit/5

@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using ProjectApp.Core;
 using ProjectApp.Core.Interfaces;
 using ProjectApp.Persistence;
+using Microsoft.AspNetCore.Identity;
+using ProjectApp.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,16 @@ builder.Services.AddDbContext<ProjectDbContext>(options =>
         builder.Configuration.GetConnectionString(
             "ProjectDbConnection")));
 
+builder.Services.AddDbContext<AppIdentityDbContext>(options =>
+    options.UseMySQL(
+        builder.Configuration.GetConnectionString(
+            "IdentityDbConnection")));
+
+builder.Services.AddDefaultIdentity<AppIdentityUser>
+    (options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<AppIdentityDbContext>();
+
+
 // Auto mapper
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -33,7 +45,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.MapRazorPages();
 app.UseRouting();
 
 app.UseAuthorization();

@@ -55,6 +55,8 @@ public class MySqlProjectPersistence : IProjectPersistence
 
     public void Save(Project project)
     {
-        throw new NotImplementedException();
+        ProjectDb projectDb = _mapper.Map<ProjectDb>(project);
+        _dbContext.ProjectDbs.Add(projectDb);
+        _dbContext.SaveChanges();
     }
 }

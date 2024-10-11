@@ -31,6 +31,8 @@ public class ProjectService : IProjectService
 
     public void Add(string userName, string title)
     {
-        throw new NotImplementedException("Add");
+        if(userName == null || title == null) throw new ArgumentException("userName or title is null");
+        Project project = new Project(title, userName);
+        _projectPersistence.Save(project);
     }
 }

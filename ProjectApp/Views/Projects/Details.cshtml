@@ -31,6 +31,43 @@
     </dl>
 </div>
 <h2>Tasks</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskVMs[0].Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskVMs[0].Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskVMs[0].Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskVMs[0].LastUpdated)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var task in Model.TaskVMs) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => task.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => task.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => task.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => task.LastUpdated)
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
 <div>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     <a asp-action="Index">Back to List</a>

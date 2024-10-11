@@ -19,7 +19,7 @@ namespace ProjectApp.Controllers
         // GET: ProjectsController
         public ActionResult Index()
         {
-            List<Project> projects = _projectService.GetAllByUserName("dummy");
+            List<Project> projects = _projectService.GetAllByUserName("anderslm@kth.se");
             List<ProjectVm> projectsVms = new List<ProjectVm>();
             foreach (var project in projects)
             {
@@ -34,9 +34,8 @@ namespace ProjectApp.Controllers
             try
             {
                 Project project = _projectService.GetById(id, "anderslm@kth.se"); // current user
-                if (project == null) return BadRequest(); // HTTP 400
-
                 ProjectDetailsVm detailsVm = ProjectDetailsVm.FromProject(project);
+                //skapar mapper projekt till projectdetailsVm
                 return View(detailsVm);
             }
             catch (DataException ex)

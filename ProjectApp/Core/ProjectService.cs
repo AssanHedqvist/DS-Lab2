@@ -15,19 +15,17 @@ public class ProjectService : IProjectService
     
     public List<Project> GetAllByUserName(string userName)
     {
-        List<Project> projects = _projectPersistence.GetAllByUserName(userName);
-        return projects;
+       return _projectPersistence.GetAllByUserName(userName);
     }
 
     public Project GetById(int id)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException("GetById");
     }
 
     public Project GetById(int id, string userName)
     {
         Project project = _projectPersistence.GetById(id, userName);
-        if(project == null) throw new DataException("project not found");
         return project;
     }
 

@@ -9,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // Dependency injection
-builder.Services.AddScoped<IProjectService, MockProjectService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IProjectPersistence, MySqlProjectPersistence>();
 
 // Add database context
 builder.Services.AddDbContext<ProjectDbContext>(options =>

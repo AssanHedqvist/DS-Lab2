@@ -14,11 +14,20 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectPersistence, MySqlProjectPersistence>();
 
+builder.Services.AddScoped<IAuctionPersistence, MySqlAuctionPersistence>();
+builder.Services.AddScoped<IAuctionService, AuctionService>();
+
 // Add database context
 builder.Services.AddDbContext<ProjectDbContext>(options =>
     options.UseMySQL(
         builder.Configuration.GetConnectionString(
             "ProjectDbConnection")));
+
+builder.Services.AddDbContext<AuctionDbContext>(options =>
+    options.UseMySQL(
+        builder.Configuration.GetConnectionString(
+            "AuctionDbConnection")));
+
 
 builder.Services.AddDbContext<AppIdentityDbContext>(options =>
     options.UseMySQL(

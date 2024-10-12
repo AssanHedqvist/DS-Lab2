@@ -38,7 +38,10 @@ public class AuctionService : IAuctionService
 
     public Auction GetById(int id, string username)
     {
-        return _auctionPersistence.GetById(id, username);
+        Auction auction = _auctionPersistence.GetById(id, username);
+        auction.sortBids();
+        return auction;
+
     }
 
     public void AddBid(int id, Bid bid)

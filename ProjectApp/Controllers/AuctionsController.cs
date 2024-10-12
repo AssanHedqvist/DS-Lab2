@@ -33,7 +33,7 @@ namespace ProjectApp.Controllers
         {
             Auction auction = _auctionService.GetById(id, User.Identity.Name);
             AuctionDetailsVm detailsVm = AuctionDetailsVm.FromAuction(auction);
-            return View();
+            return View(detailsVm);
         }
 
         // GET: AuctionController/Create

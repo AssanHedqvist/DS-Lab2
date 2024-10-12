@@ -39,6 +39,10 @@ public class Auction
     {
         _bids.Add(newBid);
     }
+    public void sortBids()
+    {
+        _bids = _bids.OrderByDescending(b => b.bidSize).ToList();
+    }
     
     public override string ToString()
     {

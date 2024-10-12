@@ -8,7 +8,8 @@ public class Auction
     public string username { get; set; }
     public double startPrice { get; set; }
     public DateTime expirationDate { get; set; }
-    private List<Bid> _bids = new List<Bid>();   
+    private List<Bid> _bids = new List<Bid>(); 
+    public IEnumerable<Bid> Bids => _bids;
     
     
     public bool isExpired { get; set; }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ProjectApp.Core;
 using ProjectApp.Core.Interfaces;
 
@@ -40,7 +41,20 @@ public class MySqlAuctionPersistence : IAuctionPersistence
 
     public Auction GetById(int id, string username)
     {
-        throw new NotImplementedException();
+        
+            AuctionDb auctionDb = _dbContext.AuctionDbs
+            .Where(a => a.Id == id)
+            .Include(a => a.BidDbs)
+            .FirstOrDefault();
+            
+            Auction auction = _mapper.Map<Auction>(auctionDb);
+        
+            foreach (BidDb bidDb in auctionDb.BidDbs)
+            {
+                auction.addBid(_mapper.Map<Bid>(bidDb));
+            }
+            return auction;
+        
     }
     
 

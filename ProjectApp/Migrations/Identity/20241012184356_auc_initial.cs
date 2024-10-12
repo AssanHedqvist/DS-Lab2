@@ -41,7 +41,7 @@ namespace ProjectApp.Migrations.Identity
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     username = table.Column<string>(type: "longtext", nullable: false),
-                    bidSize = table.Column<int>(type: "int", nullable: false),
+                    bidSize = table.Column<double>(type: "double", nullable: false),
                     bidTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     AuctionId = table.Column<int>(type: "int", nullable: false)
                 },

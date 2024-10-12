@@ -31,6 +31,8 @@ namespace ProjectApp.Controllers
         // GET: AuctionController/Details/5
         public ActionResult Details(int id)
         {
+            Auction auction = _auctionService.GetById(id, User.Identity.Name);
+            AuctionDetailsVm detailsVm = AuctionDetailsVm.FromAuction(auction);
             return View();
         }
 

@@ -12,7 +12,7 @@ public class BidDb
     public string username { get; set; }
     
     [Required]
-    public int bidSize { get; set; }
+    public double bidSize { get; set; }
     
     [Required]
     [DataType(DataType.DateTime)]

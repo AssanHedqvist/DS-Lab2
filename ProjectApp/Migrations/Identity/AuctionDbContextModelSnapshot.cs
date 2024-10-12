@@ -61,8 +61,8 @@ namespace ProjectApp.Migrations.Identity
                     b.Property<int>("AuctionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("bidSize")
-                        .HasColumnType("int");
+                    b.Property<double>("bidSize")
+                        .HasColumnType("double");
 
                     b.Property<DateTime>("bidTime")
                         .HasColumnType("datetime(6)");

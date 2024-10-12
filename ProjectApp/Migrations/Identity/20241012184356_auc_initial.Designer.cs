@@ -11,7 +11,7 @@ using ProjectApp.Persistence;
 namespace ProjectApp.Migrations.Identity
 {
     [DbContext(typeof(AuctionDbContext))]
-    [Migration("20241012153232_auc_initial")]
+    [Migration("20241012184356_auc_initial")]
     partial class auc_initial
     {
         /// <inheritdoc />
@@ -64,8 +64,8 @@ namespace ProjectApp.Migrations.Identity
                     b.Property<int>("AuctionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("bidSize")
-                        .HasColumnType("int");
+                    b.Property<double>("bidSize")
+                        .HasColumnType("double");
 
                     b.Property<DateTime>("bidTime")
                         .HasColumnType("datetime(6)");

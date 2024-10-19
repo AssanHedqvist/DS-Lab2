@@ -61,10 +61,14 @@ public class MySqlAuctionPersistence : IAuctionPersistence
 
     public void UpdateAuction(Auction auction)
     {
-         var auctionDb = _mapper.Map<AuctionDb>(auction);
-         _dbContext.AuctionDbs.Update(auctionDb);
-         _dbContext.SaveChanges();
-            
+        var auctionDb = _mapper.Map<AuctionDb>(auction);
+        var existingAuction = _dbContext.AuctionDbs.Find(auction.id);
+        if (existingAuction != null)
+        {
+            _dbContext.Entry(existingAuction).CurrentValues.SetValues(auctionDb);
+            _dbContext.SaveChanges();
+        }
+
     }
 
 

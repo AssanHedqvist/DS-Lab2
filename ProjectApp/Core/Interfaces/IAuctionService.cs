@@ -9,7 +9,7 @@ public interface IAuctionService
         double startingPrice, 
         string username);
 
-    void EditAuction(int id, string username, string newDescription);
+    void UpdateAuction(int id, string username, string newDescription);
 
     Auction GetById(int id, string username);
 

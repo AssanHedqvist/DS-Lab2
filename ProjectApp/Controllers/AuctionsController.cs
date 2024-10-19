@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Utilities;
 using ProjectApp.Core;
 using ProjectApp.Core.Interfaces;
 using ProjectApp.Models.Auctions;
@@ -64,9 +65,11 @@ namespace ProjectApp.Controllers
         }
 
         // GET: AuctionController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id )
         {
-            return View();
+            Auction auction = _auctionService.GetById(id, User.Identity.Name);
+            EditAuctionVm editAuctionVm = EditAuctionVm.FromAuction(auction);
+            return View(editAuctionVm);
         }
 
         // POST: AuctionController/Edit/5
@@ -75,7 +78,9 @@ namespace ProjectApp.Controllers
         public ActionResult Edit(int id, IFormCollection collection)
         {
             try
-            {
+            {   
+                
+                _auctionService.UpdateAuction(id, User.Identity.Name, collection["Description"]);
                 return RedirectToAction(nameof(Index));
             }
             catch

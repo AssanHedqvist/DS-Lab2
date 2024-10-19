@@ -6,8 +6,6 @@ public interface IAuctionPersistence
     
     void AddAuction(Auction newAuction);
     
-    void EditAuction(int id, string username, string newDescription);
-    
     Auction GetById(int id, string username);
     
     void UpdateAuction(Auction auction);

@@ -31,9 +31,13 @@ public class AuctionService : IAuctionService
         _auctionPersistence.AddAuction(new Auction(name, description, username, startingPrice, expirationDate));
     }
 
-    public void EditAuction(int id, string username, string newDescription)
+    public void UpdateAuction(int id, string username, string newDescription)
     {
-        
+        Auction auction = _auctionPersistence.GetById(id, username);
+        if (auction.username != username)
+            throw new ArgumentException("You are not the owner of this auction.");
+        auction.description = newDescription;
+        _auctionPersistence.UpdateAuction(auction);
     }
 
     public Auction GetById(int id, string username)

@@ -67,9 +67,7 @@ public class MySqlAuctionPersistence : IAuctionPersistence
 
     public void AddBid(int id, Bid bid)
     {
-        if (bid == null) { throw new ArgumentException("Bid is null"); }
         AuctionDb auctionDb = _mapper.Map<AuctionDb>(GetById(id));
-        if (auctionDb == null) { throw new ArgumentException("Auction is null"); }
         BidDb bidDb = _mapper.Map<BidDb>(bid);
         auctionDb.BidDbs.Add(bidDb);
         _dbContext.SaveChanges();
@@ -83,7 +81,15 @@ public class MySqlAuctionPersistence : IAuctionPersistence
 
     public List<Auction> GetBidActive(string username)
     {
-        throw new NotImplementedException();
+        List<AuctionDb> auctionDb = _dbContext.AuctionDbs
+            .Where(a => a.username == username)
+            .ToList();
+        List<Auction> result = new List<Auction>();
+        foreach (AuctionDb adb in auctionDb)
+        {
+            result.Add(_mapper.Map<Auction>(adb));
+        }
+        return result;
     }
 
     public List<Auction> GetWonAuctions(string username)

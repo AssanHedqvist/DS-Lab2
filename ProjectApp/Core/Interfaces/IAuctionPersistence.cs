@@ -10,7 +10,11 @@ public interface IAuctionPersistence
     
     Auction GetById(int id, string username);
     
+    void UpdateAuction(Auction auction);
+    
     void AddBid(int id, Bid bid);
+    
+    List<Auction> GetOngoingAuctions();
     
     List<Auction> GetBidActive(string username);
     

@@ -19,7 +19,7 @@ namespace ProjectApp.Controllers
         // GET: AuctionController
         public ActionResult Index()
         {
-            List<Auction> auctions = _auctionService.GetAllAuctions();
+            List<Auction> auctions = _auctionService.GetOngoingAuctions();
             List<AuctionVm> auctionVms = new List<AuctionVm>();
             foreach (var auction in auctions)
             {

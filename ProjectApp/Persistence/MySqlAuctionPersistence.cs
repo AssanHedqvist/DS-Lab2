@@ -56,11 +56,25 @@ public class MySqlAuctionPersistence : IAuctionPersistence
             return auction;
         
     }
-    
+
+    public void UpdateAuction(Auction auction)
+    {
+         var auctionDb = _mapper.Map<AuctionDb>(auction);
+         _dbContext.AuctionDbs.Update(auctionDb);
+         _dbContext.SaveChanges();
+            
+    }
+
 
     public void AddBid(int id, Bid bid)
     {
         throw new NotImplementedException();
+    }
+
+    public List<Auction> GetOngoingAuctions()
+    {
+        //Vet inte om vi ska ska göra såhär
+        return GetAllAuctions();
     }
 
     public List<Auction> GetBidActive(string username)

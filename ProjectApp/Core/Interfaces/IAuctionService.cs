@@ -17,6 +17,8 @@ public interface IAuctionService
     
     List<Auction> GetAllAuctions();
     
+    List<Auction> GetOngoingAuctions();
+    
     List<Auction> GetBidActive(string username);
     
     List<Auction> GetWonAuctions(string username);

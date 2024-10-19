@@ -54,6 +54,20 @@ public class AuctionService : IAuctionService
         return _auctionPersistence.GetAllAuctions();
     }
 
+    public List<Auction> GetOngoingAuctions()
+    {
+        List<Auction> activeAuctions = _auctionPersistence.GetAllAuctions();
+        foreach (Auction auction in activeAuctions.ToList())
+        {
+            if(auction.expirationDate < DateTime.Now)
+            {
+                activeAuctions.Remove(auction);
+            }
+            //add sort by date
+        }
+        return activeAuctions;
+    }
+
     public List<Auction> GetBidActive(string username)
     {
         return _auctionPersistence.GetBidActive(username);

@@ -79,7 +79,15 @@ public class MySqlAuctionPersistence : IAuctionPersistence
     public List<Auction> GetOngoingAuctions()
     {
         //Vet inte om vi ska ska göra såhär
-        return GetAllAuctions();
+        // vet inte heller, men implementerar ändå
+        List<Auction> allAuctions = GetAllAuctions();
+        List<Auction> ongoingAuctions = new List<Auction>();
+        foreach (Auction adb in allAuctions)
+        {
+            if (adb.expirationDate < DateTime.Now)
+                ongoingAuctions.Add(adb);
+        }
+        return ongoingAuctions;
     }
 
     public List<Auction> GetBidActive(string username)

@@ -31,7 +31,9 @@ public class MySqlAuctionPersistence : IAuctionPersistence
     
     public void AddAuction(Auction newAuction)
     {
-        throw new NotImplementedException();;
+        AuctionDb auctionDb = _mapper.Map<AuctionDb>(newAuction);
+        _dbContext.AuctionDbs.Add(auctionDb);
+        _dbContext.SaveChanges();
     }
 
     public void EditAuction(int id, string username, string newDescription)

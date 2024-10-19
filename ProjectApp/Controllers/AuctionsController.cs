@@ -49,6 +49,12 @@ namespace ProjectApp.Controllers
         {
             try
             {
+                _auctionService.AddAuction(
+                    collection["Name"],
+                    collection["Description"],
+                    DateTime.Parse(collection["ExpirationDate"]),
+                    double.Parse(collection["StartingPrice"]),
+                    User.Identity.Name);
                 return RedirectToAction(nameof(Index));
             }
             catch

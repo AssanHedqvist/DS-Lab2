@@ -28,7 +28,7 @@ public class AuctionService : IAuctionService
             throw new ArgumentException("Expiration date invalid");
         if (startingPrice < 0)
             throw new ArgumentException("Price cannot be negative.");
-        _auctionPersistence.AddAuction(new Auction(name, description, username, startingPrice, DateTime.Now));
+        _auctionPersistence.AddAuction(new Auction(name, description, username, startingPrice, expirationDate));
     }
 
     public void EditAuction(int id, string username, string newDescription)
@@ -57,14 +57,10 @@ public class AuctionService : IAuctionService
     public List<Auction> GetOngoingAuctions()
     {
         List<Auction> activeAuctions = _auctionPersistence.GetAllAuctions();
-        foreach (Auction auction in activeAuctions.ToList())
-        {
-            if(auction.expirationDate < DateTime.Now)
-            {
-                activeAuctions.Remove(auction);
-            }
-            //add sort by date
-        }
+        activeAuctions = activeAuctions
+            .Where(a => a.expirationDate >= DateTime.Now)
+            .OrderBy(a => a.expirationDate)
+            .ToList();
         return activeAuctions;
     }
 

@@ -40,7 +40,7 @@ public class MySqlAuctionPersistence : IAuctionPersistence
         throw new NotImplementedException();
     }
 
-    public Auction GetById(int id)
+    public Auction GetById(int id, string username)
     {
             AuctionDb auctionDb = _dbContext.AuctionDbs
             .Where(a => a.Id == id)
@@ -67,7 +67,7 @@ public class MySqlAuctionPersistence : IAuctionPersistence
 
     public void AddBid(int id, Bid bid)
     {
-        AuctionDb auctionDb = _mapper.Map<AuctionDb>(GetById(id));
+        AuctionDb auctionDb = _mapper.Map<AuctionDb>(GetById(id, null));
         BidDb bidDb = _mapper.Map<BidDb>(bid);
         auctionDb.BidDbs.Add(bidDb);
         _dbContext.SaveChanges();
@@ -94,6 +94,14 @@ public class MySqlAuctionPersistence : IAuctionPersistence
 
     public List<Auction> GetWonAuctions(string username)
     {
-        throw new NotImplementedException();
+        List<AuctionDb> auctionDb = _dbContext.AuctionDbs
+            .Where(a => a.username == username && a.expirationDate < DateTime.Now)
+            .ToList();
+        List<Auction> wonAuctions = new List<Auction>();
+        foreach (AuctionDb adb in auctionDb)
+        {
+            wonAuctions.Add(_mapper.Map<Auction>(adb));
+        }
+        return wonAuctions;
     }
 }

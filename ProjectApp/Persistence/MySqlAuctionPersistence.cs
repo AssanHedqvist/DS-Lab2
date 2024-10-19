@@ -31,7 +31,8 @@ public class MySqlAuctionPersistence : IAuctionPersistence
     
     public void AddAuction(Auction newAuction)
     {
-        throw new NotImplementedException();;
+        
+        throw new NotImplementedException();
     }
 
     public void EditAuction(int id, string username, string newDescription)
@@ -39,9 +40,8 @@ public class MySqlAuctionPersistence : IAuctionPersistence
         throw new NotImplementedException();
     }
 
-    public Auction GetById(int id, string username)
+    public Auction GetById(int id)
     {
-        
             AuctionDb auctionDb = _dbContext.AuctionDbs
             .Where(a => a.Id == id)
             .Include(a => a.BidDbs)
@@ -54,7 +54,6 @@ public class MySqlAuctionPersistence : IAuctionPersistence
                 auction.addBid(_mapper.Map<Bid>(bidDb));
             }
             return auction;
-        
     }
 
     public void UpdateAuction(Auction auction)
@@ -68,7 +67,12 @@ public class MySqlAuctionPersistence : IAuctionPersistence
 
     public void AddBid(int id, Bid bid)
     {
-        throw new NotImplementedException();
+        if (bid == null) { throw new ArgumentException("Bid is null"); }
+        AuctionDb auctionDb = _mapper.Map<AuctionDb>(GetById(id));
+        if (auctionDb == null) { throw new ArgumentException("Auction is null"); }
+        BidDb bidDb = _mapper.Map<BidDb>(bid);
+        auctionDb.BidDbs.Add(bidDb);
+        _dbContext.SaveChanges();
     }
 
     public List<Auction> GetOngoingAuctions()

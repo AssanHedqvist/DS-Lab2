@@ -13,6 +13,7 @@ public class Bid
         this.bidSize = bidSize;
         this.bidTime = bidTime;
     }
+    
     public Bid(int id, string username, double bidSize, DateTime bidTime)
     {
         this.id = id;
@@ -20,7 +21,4 @@ public class Bid
         this.bidSize = bidSize;
         this.bidTime = bidTime;
     }
-    
-    
-
 }

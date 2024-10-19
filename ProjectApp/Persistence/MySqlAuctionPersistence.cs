@@ -84,12 +84,12 @@ public class MySqlAuctionPersistence : IAuctionPersistence
         List<AuctionDb> auctionDb = _dbContext.AuctionDbs
             .Where(a => a.username == username)
             .ToList();
-        List<Auction> result = new List<Auction>();
+        List<Auction> activeBiddedAuctions = new List<Auction>();
         foreach (AuctionDb adb in auctionDb)
         {
-            result.Add(_mapper.Map<Auction>(adb));
+            activeBiddedAuctions.Add(_mapper.Map<Auction>(adb));
         }
-        return result;
+        return activeBiddedAuctions;
     }
 
     public List<Auction> GetWonAuctions(string username)

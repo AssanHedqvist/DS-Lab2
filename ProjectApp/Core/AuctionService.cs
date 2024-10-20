@@ -73,29 +73,33 @@ public class  AuctionService : IAuctionService
     
     public List<Auction> GetBidActive(string username)
     {
-        return null;
+        List<Auction> list = _auctionPersistence.GetAllAuctions();
+        List<Auction> activeBidAuctions = new List<Auction>();
+        foreach (Auction auction in list)
+        {
+            if (!auction.Bids.Any() || auction.expirationDate < DateTime.Now)
+                continue;
+            foreach (Bid bid in auction.Bids)
+            {
+                if (bid.username.Equals(username))
+                    activeBidAuctions.Add(auction);
+            }
+        }
+        return activeBidAuctions;
     }
 
     public List<Auction> GetWonAuctions(string username)
     {
         List<Auction> list = _auctionPersistence.GetAllAuctions();
         List<Auction> wonAndExpiredAuctions = new List<Auction>();
-        foreach(Auction auction in list)
+        foreach (Auction auction in list)
         {
-            if (!auction.Bids.Any())
+            if (!auction.Bids.Any()) 
                 continue;
             auction.sortBids();
             if(auction.Bids.First().username.Equals(username) && auction.expirationDate < DateTime.Now)
                 wonAndExpiredAuctions.Add(auction);
         }
         return wonAndExpiredAuctions;
-    }
-
-    public List<Auction> GetActiveBid(string username)
-    {
-        List<Auction> list = _auctionPersistence.GetAllAuctions();
-        List<Auction> activeBidAuctions = new List<Auction>();
-        
-        return null;
     }
 }

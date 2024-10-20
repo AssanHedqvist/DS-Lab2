@@ -10,14 +10,15 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" method="post">
+            <h4>Current description: @Html.DisplayName(Model.description)</h4> 
+            <br/>
             
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input type="hidden" asp-for="id" />
-                <label asp-for="description" class="control-label">New Description:</label>
-                <input asp-for="description" class="form-control"/>
-                <span asp-validation-for="description" class="text-danger"></span>
+                <label for="description" class="control-label">New Description:</label>
+                <input type="text" id="description" name="description" class="form-control"/>
             </div><br/>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary"/>

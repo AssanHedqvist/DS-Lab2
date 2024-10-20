@@ -51,10 +51,10 @@ namespace ProjectApp.Controllers
             try
             {
                 _auctionService.AddAuction(
-                    collection["Name"],
-                    collection["Description"],
-                    DateTime.Parse(collection["ExpirationDate"]),
-                    double.Parse(collection["StartingPrice"]),
+                    collection["name"],
+                    collection["description"],
+                    DateTime.Parse(collection["expirationDate"]),
+                    double.Parse(collection["startPrice"]),
                     User.Identity.Name);
                 return RedirectToAction(nameof(Index));
             }
@@ -75,17 +75,18 @@ namespace ProjectApp.Controllers
         // POST: AuctionController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, string description)
         {
             try
             {   
                 
-                _auctionService.UpdateAuction(id, User.Identity.Name, collection["Description"]);
+                _auctionService.UpdateAuction(id, User.Identity.Name, description);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                //redirect back to edit page
+                return RedirectToAction(nameof(Edit), new { id });
             }
         }
 
@@ -123,6 +124,7 @@ namespace ProjectApp.Controllers
             }
             catch (Exception ex)
             {
+                //redirect to error page
                 return View();
             }
         }

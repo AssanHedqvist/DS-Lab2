@@ -18,13 +18,20 @@ public class MySqlAuctionPersistence : IAuctionPersistence
 
     public List<Auction> GetAllAuctions()
     {
-        List<AuctionDb> auctionDb = _dbContext.AuctionDbs
+        List<AuctionDb> auctionDblist = _dbContext.AuctionDbs
+            .Include(a => a.BidDbs)
             .ToList();
         List<Auction> result = new List<Auction>();
-        foreach (AuctionDb adb in auctionDb)
+        foreach (AuctionDb auctionDb in auctionDblist)
         {
-            result.Add(_mapper.Map<Auction>(adb));
+            Auction tempAuction = _mapper.Map<Auction>(auctionDb);
+            foreach (BidDb bidDb in auctionDb.BidDbs)
+            {
+                tempAuction.addBid(_mapper.Map<Bid>(bidDb));
+            }
+            result.Add(tempAuction);
         }
+
         return result;
     }
     
@@ -34,11 +41,6 @@ public class MySqlAuctionPersistence : IAuctionPersistence
         AuctionDb auctionDb = _mapper.Map<AuctionDb>(newAuction);
         _dbContext.AuctionDbs.Add(auctionDb);
         _dbContext.SaveChanges();
-    }
-
-    public void EditAuction(int id, string username, string newDescription)
-    {
-        throw new NotImplementedException();
     }
 
     public Auction GetById(int id, string username)
@@ -71,7 +73,6 @@ public class MySqlAuctionPersistence : IAuctionPersistence
 
     }
 
-
     public void AddBid(int id, Bid bid)
     {
         AuctionDb auctionDb = _mapper.Map<AuctionDb>(GetById(id, null));
@@ -95,31 +96,5 @@ public class MySqlAuctionPersistence : IAuctionPersistence
                 ongoingAuctions.Add(adb);
         }
         return ongoingAuctions;
-    }
-
-    public List<Auction> GetBidActive(string username)
-    {
-        List<AuctionDb> auctionDb = _dbContext.AuctionDbs
-            .Where(a => a.username == username)
-            .ToList();
-        List<Auction> activeBiddedAuctions = new List<Auction>();
-        foreach (AuctionDb adb in auctionDb)
-        {
-            activeBiddedAuctions.Add(_mapper.Map<Auction>(adb));
-        }
-        return activeBiddedAuctions;
-    }
-
-    public List<Auction> GetWonAuctions(string username)
-    {
-        List<AuctionDb> auctionDb = _dbContext.AuctionDbs
-            .Where(a => a.username == username && a.expirationDate < DateTime.Now)
-            .ToList();
-        List<Auction> wonAuctions = new List<Auction>();
-        foreach (AuctionDb adb in auctionDb)
-        {
-            wonAuctions.Add(_mapper.Map<Auction>(adb));
-        }
-        return wonAuctions;
     }
 }

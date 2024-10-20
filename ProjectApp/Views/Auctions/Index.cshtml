@@ -52,7 +52,6 @@
                 @if(User.Identity.Name.Equals(auction.username))
                 {
                     @Html.ActionLink("Edit", "Edit", new { id = auction.Id }) <text> | </text>
-                    @Html.ActionLink("Delete", "Delete", new { id = auction.Id }) <text> | </text>
                 }
                 @Html.ActionLink("Details", "Details", new { id = auction.Id })
                 

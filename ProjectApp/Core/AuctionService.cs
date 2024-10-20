@@ -50,6 +50,9 @@ public class  AuctionService : IAuctionService
 
     public void AddBid(int id, Bid bid)
     {
+        Auction auction = _auctionPersistence.GetById(id, bid.username);
+        if(bid.username.Equals(auction.username))
+            throw new ArgumentException("You are the owner of this auction.");
         _auctionPersistence.AddBid(id, bid);
     }
 
@@ -70,11 +73,29 @@ public class  AuctionService : IAuctionService
     
     public List<Auction> GetBidActive(string username)
     {
-        return _auctionPersistence.GetBidActive(username);
+        return null;
     }
 
     public List<Auction> GetWonAuctions(string username)
     {
-        return _auctionPersistence.GetWonAuctions(username);
+        List<Auction> list = _auctionPersistence.GetAllAuctions();
+        List<Auction> wonAndExpiredAuctions = new List<Auction>();
+        foreach(Auction auction in list)
+        {
+            if (!auction.Bids.Any())
+                continue;
+            auction.sortBids();
+            if(auction.Bids.First().username.Equals(username) && auction.expirationDate < DateTime.Now)
+                wonAndExpiredAuctions.Add(auction);
+        }
+        return wonAndExpiredAuctions;
+    }
+
+    public List<Auction> GetActiveBid(string username)
+    {
+        List<Auction> list = _auctionPersistence.GetAllAuctions();
+        List<Auction> activeBidAuctions = new List<Auction>();
+        
+        return null;
     }
 }

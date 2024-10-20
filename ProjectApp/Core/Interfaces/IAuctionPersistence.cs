@@ -12,9 +12,4 @@ public interface IAuctionPersistence
     
     void AddBid(int id, Bid bid);
     
-    List<Auction> GetOngoingAuctions();
-    
-    List<Auction> GetBidActive(string username);
-    
-    List<Auction> GetWonAuctions(string username);
 }

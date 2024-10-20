@@ -129,7 +129,7 @@ namespace ProjectApp.Controllers
             }
         }
         
-        public ActionResult GetBidActive()
+        public ActionResult ActiveBidAuctions()
         {
             List<Auction> auctions = _auctionService.GetBidActive(User.Identity.Name);
             List<AuctionVm> auctionVms = new List<AuctionVm>();

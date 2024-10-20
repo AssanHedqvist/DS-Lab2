@@ -2,7 +2,7 @@
 
 namespace ProjectApp.Core;
 
-public class AuctionService : IAuctionService
+public class  AuctionService : IAuctionService
 {
     private readonly IAuctionPersistence _auctionPersistence;
 
@@ -67,7 +67,7 @@ public class AuctionService : IAuctionService
             .ToList();
         return activeAuctions;
     }
-
+    
     public List<Auction> GetBidActive(string username)
     {
         return _auctionPersistence.GetBidActive(username);
@@ -75,6 +75,6 @@ public class AuctionService : IAuctionService
 
     public List<Auction> GetWonAuctions(string username)
     {
-        return null;
+        return _auctionPersistence.GetWonAuctions(username);
     }
 }

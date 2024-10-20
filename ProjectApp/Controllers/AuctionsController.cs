@@ -65,7 +65,7 @@ namespace ProjectApp.Controllers
         }
 
         // GET: AuctionController/Edit/5
-        public ActionResult Edit(int id )
+        public ActionResult Edit(int id)
         {
             Auction auction = _auctionService.GetById(id, User.Identity.Name);
             EditAuctionVm editAuctionVm = EditAuctionVm.FromAuction(auction);
@@ -108,6 +108,45 @@ namespace ProjectApp.Controllers
             {
                 return View();
             }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PlaceBid(int auctionId, double bidSize)
+        {
+            try
+            {
+                _auctionService.AddBid(auctionId, new Bid(User.Identity.Name, 
+                    bidSize, 
+                    DateTime.Now));
+                return RedirectToAction(nameof(Details), new { id = auctionId });
+            }
+            catch (Exception ex)
+            {
+                return View();
+            }
+        }
+        
+        public ActionResult GetBidActive()
+        {
+            List<Auction> auctions = _auctionService.GetBidActive(User.Identity.Name);
+            List<AuctionVm> auctionVms = new List<AuctionVm>();
+            foreach (var auction in auctions)
+            {
+                auctionVms.Add(AuctionVm.FromAuction(auction));
+            }
+            return View(auctionVms);
+        }
+        
+        public ActionResult GetWonAuctions()
+        {
+            List<Auction> auctions = _auctionService.GetWonAuctions(User.Identity.Name);
+            List<AuctionVm> auctionVms = new List<AuctionVm>();
+            foreach (var auction in auctions)
+            {
+                auctionVms.Add(AuctionVm.FromAuction(auction));
+            }
+            return View(auctionVms);
         }
     }
 }

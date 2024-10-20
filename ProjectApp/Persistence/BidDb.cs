@@ -18,6 +18,8 @@ public class BidDb
     [DataType(DataType.DateTime)]
     public DateTime bidTime { get; set; }
     
+    public int AuctionId { get; set; }
+    
     [ForeignKey("AuctionId")]
     public AuctionDb AuctionDb { get; set; }
     

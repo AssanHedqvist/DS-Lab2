@@ -138,7 +138,7 @@ namespace ProjectApp.Controllers
             return View(auctionVms);
         }
         
-        public ActionResult GetWonAuctions()
+        public ActionResult WonAuctions()
         {
             List<Auction> auctions = _auctionService.GetWonAuctions(User.Identity.Name);
             List<AuctionVm> auctionVms = new List<AuctionVm>();

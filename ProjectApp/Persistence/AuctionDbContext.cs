@@ -10,7 +10,4 @@ public class AuctionDbContext : DbContext
     public AuctionDbContext(DbContextOptions<AuctionDbContext> options) : base(options)
     {
     }
-    
-    
-    
 }

@@ -76,10 +76,13 @@ public class MySqlAuctionPersistence : IAuctionPersistence
     {
         AuctionDb auctionDb = _mapper.Map<AuctionDb>(GetById(id, null));
         BidDb bidDb = _mapper.Map<BidDb>(bid);
+
+        bidDb.AuctionId = auctionDb.Id;
+        _dbContext.BidsDbs.Add(bidDb);
         auctionDb.BidDbs.Add(bidDb);
         _dbContext.SaveChanges();
     }
-
+    
     public List<Auction> GetOngoingAuctions()
     {
         //Vet inte om vi ska ska göra såhär

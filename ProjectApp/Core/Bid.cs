@@ -1,8 +1,7 @@
 ﻿namespace ProjectApp.Core;
 
-public class Bid
+public class Bid : BaseEntity
 {
-    public int id { get; set; }
     public string username { get; set; }
     public double bidSize { get; set; }
     public DateTime bidTime { get; set; }

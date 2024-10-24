@@ -1,8 +1,7 @@
 ﻿namespace ProjectApp.Core;
 
-public class Auction
+public class Auction : BaseEntity
 {
-    public int id { get; set; }
     public string name { get; set; }
     public string description { get; set; }
     public string username { get; set; }
@@ -15,7 +14,6 @@ public class Auction
     public bool isExpired { get; set; }
     public Auction(int id, string name, string description, string username, double startPrice, DateTime expirationDate)
     {   
-        this.id = id;
         this.name = name;
         this.description = description;
         this.username = username;

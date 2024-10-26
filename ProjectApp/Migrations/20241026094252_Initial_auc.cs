@@ -4,10 +4,10 @@ using MySql.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace ProjectApp.Migrations.Identity
+namespace ProjectApp.Migrations
 {
     /// <inheritdoc />
-    public partial class auc_initial : Migration
+    public partial class Initial_auc : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,8 +25,7 @@ namespace ProjectApp.Migrations.Identity
                     description = table.Column<string>(type: "longtext", nullable: false),
                     username = table.Column<string>(type: "longtext", nullable: false),
                     startPrice = table.Column<double>(type: "double", nullable: false),
-                    expirationDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    isExpired = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    expirationDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {

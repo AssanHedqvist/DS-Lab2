@@ -1,17 +1,14 @@
-﻿namespace ProjectApp.Core.Interfaces;
+﻿using ProjectApp.Models.Auctions;
+
+namespace ProjectApp.Core.Interfaces;
 
 public interface IAuctionService
 {
-    void AddAuction(
-        string name, 
-        string description, 
-        DateTime expirationDate,
-        double startingPrice, 
-        string username);
-
+    void AddAuction(AuctionVm auctionVm);
+    
     void UpdateAuction(int id, string username, string newDescription);
 
-    Auction GetById(int id, string username);
+    Auction GetById(int id);
 
     void AddBid(int id, Bid bid);
     
@@ -23,4 +20,5 @@ public interface IAuctionService
     
     List<Auction> GetWonAuctions(string username);
 
+    void DeleteAuction(int id, string username);
 }

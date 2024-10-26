@@ -1,8 +1,11 @@
-﻿namespace ProjectApp.Core;
+﻿using ProjectApp.Persistence;
+
+namespace ProjectApp.Core;
 
 public class Auction
 {
-    public int id { get; set; }
+
+    public int Id;
     public string name { get; set; }
     public string description { get; set; }
     public string username { get; set; }
@@ -12,19 +15,6 @@ public class Auction
     public IEnumerable<Bid> Bids => _bids;
     
     
-    public bool isExpired { get; set; }
-    public Auction(int id, string name, string description, string username, double startPrice, DateTime expirationDate)
-    {   
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.username = username;
-        this.startPrice = startPrice;
-        this.expirationDate = expirationDate;
-        this.isExpired = false;
-    }
-    
-    
     public Auction(string name, string description, string username, double startPrice, DateTime expirationDate)
     {
         this.name = name;
@@ -32,7 +22,15 @@ public class Auction
         this.username = username;
         this.startPrice = startPrice;
         this.expirationDate = expirationDate;
-        this.isExpired = false;
+    }
+    public Auction(int Id, string name, string description, string username, double startPrice, DateTime expirationDate)
+    {
+        this.Id = Id;
+        this.name = name;
+        this.description = description;
+        this.username = username;
+        this.startPrice = startPrice;
+        this.expirationDate = expirationDate;
     }
     
     public void addBid(Bid newBid)
@@ -46,7 +44,7 @@ public class Auction
     
     public override string ToString()
     {
-        return $"{id}: {name} - {description} - {username} - {startPrice} - {expirationDate} - {isExpired}";
+        return $"{name} - {description} - {username} - {startPrice} - {expirationDate}";
     }
     
 }

@@ -1,33 +1,72 @@
-@model ProjectApp.Models.Auctions.EditAuctionVm
-
+@model ProjectApp.Models.Auctions.AuctionVm
+<style>
+    .highlight {
+        background-color: #f2e7c3;
+    }
+</style>
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Auction";
 }
 
-<h1>Edit description</h1>
-
+<h1>Edit Auction</h1>
 
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <form asp-action="Edit" method="post">
-            <h4>Current description: @Html.DisplayName(Model.description)</h4> 
-            <br/>
-            
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <table class="table">
+                <tr>
+                    <th>Name</th>
+                    <td>
+                        <input asp-for="name" class="form-control" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Start Price</th>
+                    <td>
+                        <input asp-for="startPrice" class="form-control" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Username</th>
+                    <td>
+                        <input asp-for="username" class="form-control" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Expiration Date</th>
+                    <td>
+                        <input asp-for="expirationDate" class="form-control" readonly />
+                    </td>
+                </tr>
+                <tr class="highlight">
+                    <th>Current Description</th>
+                    <td>
+                        @Html.DisplayFor(model => model.description)
+                    </td>
+                </tr>
+                <tr>
+                    <th>New Description</th>
+                    <td>
+                        <input type="text" id="description" name="description" class="form-control" />
+                    </td>
+                </tr>
+            </table>
             <div class="form-group">
-                <input type="hidden" asp-for="id" />
-                <label for="description" class="control-label">New Description:</label>
-                <input type="text" id="description" name="description" class="form-control"/>
-            </div><br/>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary"/>
+                <input type="submit" value="Save auction" class="btn btn-primary" />
             </div>
+        </form>
+        <br/> 
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="Delete auction" class="btn btn-danger" />
         </form>
     </div>
 </div>
 
-<div><br/>
-    <a asp-action="Index">Back to List</a>
+<div>
+    <br/><a asp-action="Index">Back to List</a>
 </div>
-

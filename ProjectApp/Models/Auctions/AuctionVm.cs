@@ -5,6 +5,7 @@ namespace ProjectApp.Models.Auctions;
 
 public class AuctionVm
 {
+ 
     
     [ScaffoldColumn(false)] public int Id { get; set; }
     
@@ -20,19 +21,34 @@ public class AuctionVm
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}")]
     public DateTime expirationDate { get; set; }
     
-    public bool isExpired { get; set; }
+
+
+    public AuctionVm(string name, string description, double startPrice, string username, DateTime expirationDate)
+    {
+        this.name = name;
+        this.description = description;
+        this.startPrice = startPrice;
+        this.username = username;
+        this.expirationDate = expirationDate;
+    }
+
+    public AuctionVm()
+    {
+        
+    }
     
+    
+
     public static AuctionVm FromAuction(Auction auction)
     {
         return new AuctionVm
         {
-            Id = auction.id,
+            Id = auction.Id,
             name = auction.name,
             description = auction.description,
             startPrice = auction.startPrice,
             username = auction.username,
             expirationDate = auction.expirationDate,
-            isExpired = auction.isExpired
         };
     }
     

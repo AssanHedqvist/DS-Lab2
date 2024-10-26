@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ProjectApp.Core;
 
 namespace ProjectApp.Persistence;
 

@@ -1,105 +1,140 @@
-﻿using ProjectApp.Core.Interfaces;
+﻿using AutoMapper;
+using ProjectApp.Core.Interfaces;
+using ProjectApp.Models.Auctions;
+using ProjectApp.Persistence;
 
 namespace ProjectApp.Core;
 
 public class  AuctionService : IAuctionService
 {
-    private readonly IAuctionPersistence _auctionPersistence;
 
-    public AuctionService(IAuctionPersistence auctionPersistence)
+    private readonly IAuctionRepository _auctionRepository;
+    private readonly IBidRepository _bidRepository;
+    private readonly IMapper _mapper;
+
+    public AuctionService(IAuctionRepository auctionRepository, IBidRepository bidRepository, IMapper mapper)
     {
-        _auctionPersistence = auctionPersistence;
+        _mapper = mapper;
+        _bidRepository = bidRepository;
+        _auctionRepository = auctionRepository;
     }
-
-    public void AddAuction(string name,
-        string description,
-        DateTime expirationDate,
-        double startingPrice,
-        string username)
+    
+    public void AddAuction(AuctionVm auctionVm)
     {
-        if (string.IsNullOrWhiteSpace(name) ||
-            string.IsNullOrWhiteSpace(description) ||
-            string.IsNullOrWhiteSpace(username))
-        {
-            throw new ArgumentException("Name, description, and username can neither be empty or null.");
-        }
-
-        if (DateTime.Compare(expirationDate, DateTime.Now) <= 0)
+        
+        Auction auction = _mapper.Map<Auction>(auctionVm);
+        
+        if (DateTime.Compare(auction.expirationDate, DateTime.Now) <= 0)
             throw new ArgumentException("Expiration date invalid");
-        if (startingPrice < 0)
+        
+        if (auction.startPrice < 0)
             throw new ArgumentException("Price cannot be negative.");
-        _auctionPersistence.AddAuction(new Auction(name, description, username, startingPrice, expirationDate));
+        
+        AuctionDb auctionDb = _mapper.Map<AuctionDb>(auction);
+        _auctionRepository.Add(auctionDb);
     }
 
     public void UpdateAuction(int id, string username, string newDescription)
     {
-        Auction auction = _auctionPersistence.GetById(id, username);
-        if (auction.username != username)
+        AuctionDb auctionDb = _auctionRepository.GetById(id);
+        if (auctionDb.username != username)
             throw new ArgumentException("You are not the owner of this auction.");
-        auction.description = newDescription;
-        _auctionPersistence.UpdateAuction(auction);
+        auctionDb.description = newDescription;
+        _auctionRepository.Update(auctionDb);
     }
 
-    public Auction GetById(int id, string username)
+    public Auction GetById(int id)
     {
-        Auction auction = _auctionPersistence.GetById(id, username);
+        AuctionDb auctionDb = _auctionRepository.GetById(id);
+        Auction auction = _mapper.Map<Auction>(auctionDb);
+        List<BidDb> bidDbs = _bidRepository.GetBidsByAuctionId(id);
+        foreach(BidDb bidDb in bidDbs)
+        {
+            auction.addBid(_mapper.Map<Bid>(bidDb));
+        }
         auction.sortBids();
         return auction;
-
     }
 
     public void AddBid(int id, Bid bid)
     {
-        Auction auction = _auctionPersistence.GetById(id, bid.username);
-        if(bid.username.Equals(auction.username))
+        //finns det krav för minimum bud?
+        AuctionDb auctionDb = _auctionRepository.GetById(id);
+        if(bid.username.Equals(auctionDb.username))
             throw new ArgumentException("You are the owner of this auction.");
-        _auctionPersistence.AddBid(id, bid);
+        BidDb bidDb = _mapper.Map<BidDb>(bid);
+        auctionDb.BidDbs.Add(bidDb);
+        _bidRepository.Add(bidDb);
     }
 
     public List<Auction> GetAllAuctions()
     {
-        return _auctionPersistence.GetAllAuctions();
+        List<AuctionDb> auctionDbs = _auctionRepository.GetAll();
+        List<Auction> auctions = new List<Auction>();
+        foreach (AuctionDb auctionDb in auctionDbs)
+        {
+            auctions.Add(_mapper.Map<Auction>(auctionDb));
+        }
+
+        return auctions;
     }
 
     public List<Auction> GetOngoingAuctions()
     {
-        List<Auction> activeAuctions = _auctionPersistence.GetAllAuctions();
-        activeAuctions = activeAuctions
-            .Where(a => a.expirationDate >= DateTime.Now)
-            .OrderBy(a => a.expirationDate)
-            .ToList();
-        return activeAuctions;
+        List<AuctionDb> auctionDbs = _auctionRepository.GetAll();
+        List<Auction> ongoingAuctions = new List<Auction>();
+        foreach (AuctionDb auctionDb in auctionDbs)
+        {
+            if (auctionDb.expirationDate > DateTime.Now)
+            {
+                ongoingAuctions.Add(_mapper.Map<Auction>(auctionDb));
+            }
+        }
+        return ongoingAuctions;
     }
     
     public List<Auction> GetBidActive(string username)
     {
-        List<Auction> list = _auctionPersistence.GetAllAuctions();
-        List<Auction> activeBidAuctions = new List<Auction>();
-        foreach (Auction auction in list)
-        {
-            if (!auction.Bids.Any() || auction.expirationDate < DateTime.Now)
-                continue;
-            foreach (Bid bid in auction.Bids)
-            {
-                if (bid.username.Equals(username))
-                    activeBidAuctions.Add(auction);
-            }
-        }
-        return activeBidAuctions;
+            var activeBidAuctions = _auctionRepository
+                .GetAll()
+                .Where(auction => auction.expirationDate >= DateTime.Now) // Keep only active auctions
+                .Select(auction => new
+                {
+                    Auction = auction,
+                    Bids = _bidRepository.GetBidsByAuctionId(auction.Id)
+                })
+                .Where(x => x.Bids.Any()) // Keep only auctions with bids
+                .Where(x => x.Bids.Any(bid => bid.username == username)) // Keep only auctions with bids by the user
+                .Select(x => _mapper.Map<Auction>(x.Auction)) // Map AuctionDb to Auction
+                .ToList();
+
+            return activeBidAuctions;
+        
     }
 
     public List<Auction> GetWonAuctions(string username)
     {
-        List<Auction> list = _auctionPersistence.GetAllAuctions();
-        List<Auction> wonAndExpiredAuctions = new List<Auction>();
-        foreach (Auction auction in list)
-        {
-            if (!auction.Bids.Any()) 
-                continue;
-            auction.sortBids();
-            if(auction.Bids.First().username.Equals(username) && auction.expirationDate < DateTime.Now)
-                wonAndExpiredAuctions.Add(auction);
-        }
-        return wonAndExpiredAuctions;
+        var wonAuctions = _auctionRepository
+            .GetAll()
+            .Where(auction => auction.expirationDate < DateTime.Now) // Keep only expired auctions
+            .Select(auction => new
+            {
+                Auction = auction,
+                Bids = _bidRepository.GetBidsByAuctionId(auction.Id)
+            })
+            .Where(x => x.Bids.Any()) // Keep only auctions with bids
+            .Where(x => x.Bids.First().username == username) // Keep only auctions where the user has the highest bid
+            .Select(x => _mapper.Map<Auction>(x.Auction)) // Map AuctionDb to Auction
+            .ToList();
+
+        return wonAuctions;
+    }
+
+    public void DeleteAuction(int id, string username)
+    {
+        AuctionDb auctionDb = _auctionRepository.GetById(id);
+        if (auctionDb.username != username)
+            throw new ArgumentException("You are not the owner of this auction.");
+        _auctionRepository.Remove(auctionDb);
     }
 }

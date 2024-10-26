@@ -17,7 +17,7 @@ namespace ProjectApp.Controllers
         {
             _auctionService = auctionService;
         }
-        // GET: AuctionController
+ 
         public ActionResult Index()
         {
             List<Auction> auctions = _auctionService.GetOngoingAuctions();
@@ -28,34 +28,33 @@ namespace ProjectApp.Controllers
             }
             return View(auctionVms);
         }
-
-        // GET: AuctionController/Details/5
+        
         public ActionResult Details(int id)
         {
-            Auction auction = _auctionService.GetById(id, User.Identity.Name);
+            Auction auction = _auctionService.GetById(id);
             AuctionDetailsVm detailsVm = AuctionDetailsVm.FromAuction(auction);
             return View(detailsVm);
         }
-
-        // GET: AuctionController/Create
+        
         public ActionResult Create()
         {
             return View();
         }
-
-        // POST: AuctionController/Create
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
         {
             try
             {
-                _auctionService.AddAuction(
-                    collection["name"],
-                    collection["description"],
-                    DateTime.Parse(collection["expirationDate"]),
+               
+                AuctionVm auctionVm = new AuctionVm(
+                    collection["name"], 
+                    collection["description"], 
                     double.Parse(collection["startPrice"]),
-                    User.Identity.Name);
+                    User.Identity.Name,
+                    DateTime.Parse(collection["expirationDate"]));
+                _auctionService.AddAuction(auctionVm);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -63,16 +62,14 @@ namespace ProjectApp.Controllers
                 return View();
             }
         }
-
-        // GET: AuctionController/Edit/5
+        
         public ActionResult Edit(int id)
         {
-            Auction auction = _auctionService.GetById(id, User.Identity.Name);
-            EditAuctionVm editAuctionVm = EditAuctionVm.FromAuction(auction);
-            return View(editAuctionVm);
+            Auction auction = _auctionService.GetById(id);
+            AuctionVm auctionVm = AuctionVm.FromAuction(auction);
+            return View(auctionVm);
         }
-
-        // POST: AuctionController/Edit/5
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, string description)
@@ -89,24 +86,19 @@ namespace ProjectApp.Controllers
                 return RedirectToAction(nameof(Edit), new { id });
             }
         }
-
-        // GET: AuctionController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: AuctionController/Delete/5
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id)
         {
             try
             {
+                _auctionService.DeleteAuction(id, User.Identity.Name);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                //error page
                 return View();
             }
         }
@@ -117,6 +109,7 @@ namespace ProjectApp.Controllers
         {
             try
             {
+                //kanske skicka in en BidVM istället för att skapa en bid här
                 _auctionService.AddBid(auctionId, new Bid(User.Identity.Name, 
                     bidSize, 
                     DateTime.Now));

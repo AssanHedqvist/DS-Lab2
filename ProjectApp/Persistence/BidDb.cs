@@ -1,13 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ProjectApp.Core;
 
 namespace ProjectApp.Persistence;
 
-public class BidDb
+public class BidDb : BaseEntityDb
 {
-    [Key]
-    public int Id { get; set; }
-    
     [Required]
     public string username { get; set; }
     

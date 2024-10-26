@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ProjectApp.Core;
 
 namespace ProjectApp.Persistence;
 
-public class AuctionDb
+public class AuctionDb : BaseEntityDb
 {
-    [Key]
-    public int Id { get; set; }
     
     [Required]
     [MaxLength(128)]
@@ -24,11 +23,6 @@ public class AuctionDb
     [DataType(DataType.DateTime)]
     public DateTime expirationDate { get; set; }
     
-    [Required]
-    public bool isExpired { get; set; }
-    
     public List<BidDb> BidDbs { get; set; } = new List<BidDb>();
-    
-    
     
 }

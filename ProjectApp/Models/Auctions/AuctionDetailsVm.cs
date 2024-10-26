@@ -27,7 +27,7 @@ public class AuctionDetailsVm
     {
         var detailsVm = new AuctionDetailsVm()
         {
-            Id = auction.id,
+            Id = auction.Id,
             name = auction.name,
             startPrice = auction.startPrice,
             description = auction.description,

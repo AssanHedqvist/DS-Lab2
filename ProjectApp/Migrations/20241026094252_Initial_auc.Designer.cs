@@ -2,17 +2,20 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectApp.Persistence;
 
 #nullable disable
 
-namespace ProjectApp.Migrations.Identity
+namespace ProjectApp.Migrations
 {
     [DbContext(typeof(AuctionDbContext))]
-    partial class AuctionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241026094252_Initial_auc")]
+    partial class Initial_auc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,9 +34,6 @@ namespace ProjectApp.Migrations.Identity
 
                     b.Property<DateTime>("expirationDate")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("isExpired")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("name")
                         .IsRequired()

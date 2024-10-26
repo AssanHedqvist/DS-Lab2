@@ -19,7 +19,7 @@ public class BidVm
     {
         return new BidVm()
         {
-            Id = bid.id,
+            Id = bid.Id,
             username = bid.username,
             bidSize = bid.bidSize,
             bidTime = bid.bidTime

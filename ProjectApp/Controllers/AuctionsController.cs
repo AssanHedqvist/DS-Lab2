@@ -57,8 +57,9 @@ namespace ProjectApp.Controllers
                 _auctionService.AddAuction(auctionVm);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (ArgumentException ex)
             {
+                ModelState.AddModelError(string.Empty, ex.Message);
                 return View();
             }
         }
@@ -80,10 +81,10 @@ namespace ProjectApp.Controllers
                 _auctionService.UpdateAuction(id, User.Identity.Name, description);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(ArgumentException ex)
             {
-                //redirect back to edit page
-                return RedirectToAction(nameof(Edit), new { id });
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View();
             }
         }
         

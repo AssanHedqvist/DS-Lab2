@@ -30,9 +30,17 @@ public class AdminController : Controller
     public async Task<IActionResult> DeleteUser(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
+        
         if (user != null)
         {
+            var auctions = _auctionService.GetAuctionsByUser(user.UserName);
+            foreach (var auction in auctions)
+            {
+                _auctionService.DeleteAuction(auction.Id, user.UserName);
+            }
             await _userManager.DeleteAsync(user);
+            
+            
         }
         return RedirectToAction(nameof(ListAllUsers));
     }

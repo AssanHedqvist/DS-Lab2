@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ProjectApp.Models.Auctions.AuctionVm>
+
+@{
+    ViewData["Title"] = "View User Auctions";
+}
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Start Price
+        </th>
+        <th>
+            Username
+        </th>
+        <th>
+            Expiration Date
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var auction in Model)
+    {
+        <tr>
+            <td>
+                @auction.name
+            </td>
+            <td>
+                @auction.startPrice
+            </td>
+            <td>
+                @auction.username
+            </td>
+            <td>
+                @auction.expirationDate
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@auction.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@auction.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@auction.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -21,4 +21,6 @@ public interface IAuctionService
     List<Auction> GetWonAuctions(string username);
 
     void DeleteAuction(int id, string username);
+    
+    List<Auction> GetAuctionsByUser(string id);
 }

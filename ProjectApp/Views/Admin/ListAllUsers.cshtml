@@ -20,6 +20,10 @@
         <tr>
             <td>@user.UserName</td>
             <td>@user.Email</td>
+            <td>
+                @Html.ActionLink("Delete User", "DeleteUser", new { id = user.Id }, new { @class = "text-danger" }) |
+                @Html.ActionLink("Auctions", "ViewUserAuctions", new { id = user.Id })
+            </td>
         </tr>
     }
     </tbody>

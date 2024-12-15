@@ -137,4 +137,11 @@ public class  AuctionService : IAuctionService
             throw new ArgumentException("You are not the owner of this auction.");
         _auctionRepository.Remove(auctionDb);
     }
+    
+    public List<Auction> GetAuctionsByUser(string username)
+    {
+        List<AuctionDb> auctionDbs = _auctionRepository.GetAll().Where(a => a.username == username).ToList();
+        List<Auction> auctions = auctionDbs.Select(a => _mapper.Map<Auction>(a)).ToList();
+        return auctions;
+    }
 }

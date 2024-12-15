@@ -1,0 +1,25 @@
+﻿@model IEnumerable<ProjectApp.Areas.Identity.Data.AppIdentityUser>
+
+@{
+    ViewData["Title"] = "User List";
+}
+
+<h1>User List</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Email</th>
+        <th>Username</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@user.Email</td>
+            <td>@user.UserName</td>
+        </tr>
+    }
+    </tbody>
+</table>

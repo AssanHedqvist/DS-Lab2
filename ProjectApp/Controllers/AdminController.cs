@@ -12,6 +12,12 @@ public class AdminController : Controller
     {  
         _userManager = userManager;
     }
-    
- 
+
+    public ActionResult ListAllUsers()
+    {
+        List<>
     }
+    
+    
+    
+}

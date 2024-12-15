@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using ProjectApp.Core;
 using ProjectApp.Models.Auctions;
 

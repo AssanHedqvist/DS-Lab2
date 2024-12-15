@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ProjectApp.Areas.Identity.Data.AppIdentityUser>
+﻿
+@model IEnumerable<ProjectApp.Models.Auctions.UserVm>
 
 @{
     ViewData["Title"] = "User List";
@@ -17,8 +18,8 @@
     @foreach (var user in Model)
     {
         <tr>
+            <td>@user.UserName/td>
             <td>@user.Email</td>
-            <td>@user.UserName</td>
         </tr>
     }
     </tbody>

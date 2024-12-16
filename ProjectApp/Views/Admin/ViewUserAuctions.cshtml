@@ -38,9 +38,7 @@
                 @auction.expirationDate
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@auction.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@auction.Id">Details</a> |
-                @Html.ActionLink("Delete", "DeleteAuction", new { id = auction.Id, username = auction.username }, new { @class = "text-danger" }) |
+                @Html.ActionLink("Delete", "DeleteAuction", new { id = auction.Id, username = auction.username }, new { @class = "text-danger" })
             </td>
         </tr>
     }

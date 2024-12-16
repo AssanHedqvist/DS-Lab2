@@ -61,7 +61,7 @@ public class AdminController : Controller
     public ActionResult DeleteAuction(int id, string username)
     {
         _auctionService.DeleteAuction(id, username);
-        return RedirectToAction(nameof(ViewUserAuctions));
+        return RedirectToAction(nameof(ListAllUsers));
     }
 }
     

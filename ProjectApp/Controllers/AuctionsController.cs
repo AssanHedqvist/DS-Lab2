@@ -114,12 +114,13 @@ namespace ProjectApp.Controllers
                 _auctionService.AddBid(auctionId, new Bid(User.Identity.Name, 
                     bidSize, 
                     DateTime.Now));
+                
                 return RedirectToAction(nameof(Details), new { id = auctionId });
             }
             catch (Exception ex)
             {
                 //redirect to error page
-                return View();
+                return RedirectToAction(nameof(Details), new { id = auctionId });
             }
         }
         

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using ProjectApp.Core.Interfaces;
 using ProjectApp.Models.Auctions;
 using ProjectApp.Persistence;
@@ -60,6 +61,9 @@ public class  AuctionService : IAuctionService
     {
         //finns det krav för minimum bud?
         AuctionDb auctionDb = _auctionRepository.GetById(id);
+        List<BidDb> bidDbs = _bidRepository.GetBidsByAuctionId(auctionDb.Id);
+        if (bid.bidSize < auctionDb.startPrice || !bidDbs.IsNullOrEmpty() && bid.bidSize <= bidDbs.Last().bidSize)
+            throw new ArgumentException("Invalid bid size.");
         if(bid.username.Equals(auctionDb.username))
             throw new ArgumentException("You are the owner of this auction.");
         BidDb bidDb = _mapper.Map<BidDb>(bid);
@@ -123,7 +127,7 @@ public class  AuctionService : IAuctionService
                 Bids = _bidRepository.GetBidsByAuctionId(auction.Id)
             })
             .Where(x => x.Bids.Any()) // Keep only auctions with bids
-            .Where(x => x.Bids.First().username == username) // Keep only auctions where the user has the highest bid
+            .Where(x => x.Bids.Last().username == username) // Keep only auctions where the user has the highest bid
             .Select(x => _mapper.Map<Auction>(x.Auction)) // Map AuctionDb to Auction
             .ToList();
 

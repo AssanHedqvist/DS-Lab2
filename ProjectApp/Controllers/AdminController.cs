@@ -57,6 +57,12 @@ public class AdminController : Controller
         var auctionVms = auctions.Select(AuctionVm.FromAuction).ToList();
         return View(auctionVms);
     }
+
+    public ActionResult DeleteAuction(int id, string username)
+    {
+        _auctionService.DeleteAuction(id, username);
+        return RedirectToAction(nameof(ViewUserAuctions));
+    }
 }
     
     
